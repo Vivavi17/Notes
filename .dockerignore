@@ -1,0 +1,8 @@
+.idea
+*.iml
+.git/
+.env
+Dockerfile
+venv/
+__pycache__/
+.idea/
