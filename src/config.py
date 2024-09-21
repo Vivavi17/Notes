@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
     UVICORN_HOST: str
     UVICORN_PORT: int
@@ -10,10 +11,17 @@ class Settings(BaseSettings):
     PG_PASSWORD: str
     PG_DATABASE: str
 
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+
+    URL_YA_SPELLER_JSON: str
+
     @property
     def DATABASE_URL(self):
         return f"postgresql+asyncpg://{self.PG_USERNAME}:{self.PG_PASSWORD}@{self.PG_HOST}:{self.PG_PORT}/{self.PG_DATABASE}"
 
     model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_")
+
 
 settings = Settings()

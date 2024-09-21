@@ -2,8 +2,13 @@ import uvicorn
 from fastapi import FastAPI
 
 from src.config import settings
+from src.users.router import users_router
+from src.notes.router import notes_router
 
 app = FastAPI()
+
+app.include_router(users_router)
+app.include_router(notes_router)
 
 
 @app.get("/ping")
