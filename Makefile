@@ -6,8 +6,17 @@ start:
 
 run_app:
 	python3 src/main.py
+
 test:
 	pytest -s
+
+venv:
+ifeq (,$(wildcard venv))
+	@echo "Creating venv"
+	python3 -m venv venv
+	@echo "For activate venv and install requirements:"
+	@echo "source venv/bin/activate && pip install -r requirements.txt"
+endif
 
 env_file:
 ifeq (,$(wildcard .env))
