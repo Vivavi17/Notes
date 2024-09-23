@@ -1,15 +1,17 @@
+"""Конфигурация переменных среды"""
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    """Базовый класс настроек переменных среды"""
     UVICORN_HOST: str
     UVICORN_PORT: int
 
     PG_HOST: str
     PG_PORT: int
-    PG_USERNAME: str
-    PG_PASSWORD: str
-    PG_DATABASE: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
 
     SECRET_KEY: str
     ALGORITHM: str
@@ -18,10 +20,11 @@ class Settings(BaseSettings):
     URL_YA_SPELLER_JSON: str
 
     @property
-    def DATABASE_URL(self):
-        return f"postgresql+asyncpg://{self.PG_USERNAME}:{self.PG_PASSWORD}@{self.PG_HOST}:{self.PG_PORT}/{self.PG_DATABASE}"
+    def DATABASE_URL(self): # pylint: disable=invalid-name
+        """Создание URL подключения к БД"""
+        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.PG_HOST}:{self.PG_PORT}/{self.POSTGRES_DB}" # pylint: disable=line-too-long
 
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_")
+    model_config = SettingsConfigDict(env_file=".env")
 
 
 settings = Settings()

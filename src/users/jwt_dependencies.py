@@ -1,16 +1,18 @@
+"""Модуль релизации зависимостей"""
+
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-
 from jose import ExpiredSignatureError, jwt
 
 from src.config import settings
-from src.users.dao import UsersDAO
 from src.exceptions import IncorrectTokenFormatException
+from src.users.dao import UsersDAO
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/token")
 
 
 async def get_curr_user(access_token: str = Depends(oauth2_scheme)):
+    """Получить полоьзователя по токену Bearer"""
     try:
         payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
     except ExpiredSignatureError as exp_error:
