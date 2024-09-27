@@ -15,7 +15,7 @@ app.include_router(notes_router)
 
 @app.get("/ping")
 async def ping() -> str:
-    """Проверка доступа сервера"""
+    """Проверка доступа сервервиса"""
 
     return "ok"
 
