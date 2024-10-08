@@ -1,4 +1,5 @@
 """Модуль роутера заметок"""
+
 from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends

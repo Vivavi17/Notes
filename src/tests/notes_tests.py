@@ -1,4 +1,5 @@
 """Тестировние логики работы заметок"""
+
 from datetime import datetime
 
 import pytest
@@ -9,7 +10,8 @@ from src.config import settings
 @pytest.mark.parametrize("body", ["My small text", "A" * 10_000])
 async def test_add_note(body, client, mocker, requests_mock):
     """Тестирование добавления заметок"""
-    async def add(author_id, body): # pylint: disable=unused-argument
+
+    async def add(author_id, body):  # pylint: disable=unused-argument
         return {"body": body, "created_at": datetime.now()}
 
     requests_mock.get(settings.URL_YA_SPELLER_JSON, status_code=200, json=[])

@@ -1,4 +1,5 @@
 """Конфигурация тестов"""
+
 import pytest
 from fastapi.testclient import TestClient
 from mock import Mock
@@ -19,7 +20,7 @@ def users():
     return list_users
 
 
-def new_dependence(q: str | None = None): # pylint: disable=unused-argument
+def new_dependence(q: str | None = None):  # pylint: disable=unused-argument
     """Переопределение зависимости"""
     return Mock(id=1, email="first@test.com", hashed_password=get_hashed_pwd("Test"))
 

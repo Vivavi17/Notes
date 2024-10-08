@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from src.database import Base
 
 
-class Users(Base): # pylint: disable=too-few-public-methods
+class Users(Base):  # pylint: disable=too-few-public-methods
     """Модель контекста пользователя"""
 
     __tablename__ = "users"

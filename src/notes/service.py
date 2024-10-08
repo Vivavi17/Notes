@@ -1,7 +1,8 @@
 """Бизнес-логика работы с записями"""
+
 from typing import List, Optional
 
-import requests
+import aiohttp
 from pydantic import TypeAdapter
 
 from src.config import settings
@@ -17,7 +18,7 @@ def edit_text(text: str, excs: list[YaExceptionS]) -> str:
     words = []
 
     for _, exc in enumerate(excs):
-        words.append(text[j: exc.pos])
+        words.append(text[j : exc.pos])
         words.append(exc.s[0])
         j = exc.pos + exc.len
     words.append(text[j : len(text)])
@@ -46,8 +47,18 @@ def split_text(text: str) -> list[str]:
     return [text]
 
 
+async def get_request(text):
+    """Асинхронный запрос"""
+    async with aiohttp.ClientSession() as session:
+        response = await session.get(
+            settings.URL_YA_SPELLER_JSON, params={"text": text}, timeout=10
+        )
+        return response
+
+
 class NotesService:
     """Логика работы записок"""
+
     dao = NotesDAO
     adapter = TypeAdapter(List[YaExceptionS])
 
@@ -66,14 +77,12 @@ class NotesService:
         chunks = split_text(body)
         for i, text in enumerate(chunks):
             try:
-                response = requests.get(
-                    settings.URL_YA_SPELLER_JSON, params={"text": text}, timeout=10
-                )
+                response = await get_request(text)
             except ConnectionError:
                 continue
             else:
-                if response.status_code == 200:
-                    items = self.adapter.validate_json(response.content)
+                if response.status == 200:
+                    items = self.adapter.validate_json(await response.content.read())
                     chunks[i] = edit_text(text, items)
         new_text = "".join(chunks)
         return await self.dao.add(author_id=author_id, body=new_text)
